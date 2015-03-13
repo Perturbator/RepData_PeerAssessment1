@@ -3,10 +3,14 @@ John Bobo
 
 
 ## Loading and preprocessing the data
-First we load the data:
+First we load the data and use lubridate to get time objects for our time series graphs:
 
 ```r
+library(lubridate)
 amd = read.csv("/Users/johnbobo/data_science/datasciencecoursera/reproducible_research/RepData_PeerAssessment1/activity.csv")
+ints = now() + c(0:287)*minutes(5)
+intervals = rep_len(ints, length(amd$interval))
+amd$intervals = intervals
 ```
 
 ***
@@ -105,7 +109,7 @@ number of steps.
 amd_by_interval <- amd %>%
     group_by(interval) %>%
         mutate(stepsPerInterval = mean(steps, na.rm = TRUE))
-qplot(interval, stepsPerInterval, data = amd_by_interval, geom = c("line"))
+qplot(intervals, stepsPerInterval, data = amd_by_interval, geom = c("line"))
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
@@ -220,7 +224,7 @@ new_amd_by_weekday = rbind(new_amd_weekday,new_amd_weekend)
 Now we'll plot a time series to see the difference
 
 ```r
-qplot(interval, stepsPerInterval, data = new_amd_by_weekday, geom = c("line"), facets=weekday~.)
+qplot(intervals, stepsPerInterval, data = new_amd_by_weekday, geom = c("line"), facets=weekday~.)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-12-1.png) 

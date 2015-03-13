@@ -8,10 +8,13 @@ output:
 
 
 ## Loading and preprocessing the data
-First we load the data:
+First we load the data and use lubridate to get time objects for our time series graphs:
 ```{r cache = TRUE}
 library(lubridate)
 amd = read.csv("/Users/johnbobo/data_science/datasciencecoursera/reproducible_research/RepData_PeerAssessment1/activity.csv")
+ints = now() + c(0:287)*minutes(5)
+intervals = rep_len(ints, length(amd$interval))
+amd$intervals = intervals
 ```
 
 ***
@@ -140,6 +143,6 @@ new_amd_by_weekday = rbind(new_amd_weekday,new_amd_weekend)
 ```
 Now we'll plot a time series to see the difference
 ```{r}
-qplot(interval, stepsPerInterval, data = new_amd_by_weekday, geom = c("line"), facets=weekday~.)
+qplot(intervals, stepsPerInterval, data = new_amd_by_weekday, geom = c("line"), facets=weekday~.)
 ```
 
